@@ -16,15 +16,16 @@ private:
 	
 	void up(int);
 	void down(int);
+	void swap(int&, int&);
 	
 public:
 	Heap();
 	Heap(vector<int>);
 	
 	int size();
-	Heap buildHeap();
-	Heap insert(int);
-	Heap remove(int); 
+	void buildHeap();
+	void insert(int);
+	void remove(int); 
 	void print();
 	
 };
