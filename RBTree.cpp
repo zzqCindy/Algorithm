@@ -35,7 +35,7 @@ RBNode* RBTree::search(int val){
 }
 
 // change the color 
-void rbInsertFix(RBNode* ptr){
+void RBTree::rbInsertFix(RBNode* ptr){
 	
 	RBNode *parent = ptr->parent, *grandparent;
 	
@@ -49,7 +49,7 @@ void rbInsertFix(RBNode* ptr){
 			if(uncle != NULL && uncle->color == RED){
 				parent->color = BLACK;
 				grandparent->color = RED;
-				uncle = BLACK;
+				uncle->color = BLACK;
 				ptr = grandparent;
 				continue;
 			}
@@ -73,7 +73,7 @@ void rbInsertFix(RBNode* ptr){
 			if(uncle != NULL && uncle->color == RED){
 				parent->color = BLACK;
 				grandparent->color = RED;
-				uncle = BLACK;
+				uncle->color = BLACK;
 				ptr = grandparent;
 				continue;
 			}
@@ -117,8 +117,70 @@ void RBTree::rbInsert(int val){
 	
 }
 
-void RBTree::rbRemoveFix(RBNode* child, RBNode* parent){
+void RBTree::rbRemoveFix(RBNode* node){
 	
+	RBNode* brother;
+	
+	while(node != root && root->color == BLACK){
+		
+		if(node == node->parent->left){
+			brother = node->parent->right;
+			
+			if(brother->color == RED){
+				brother->color = BLACK;
+				node->parent->color = RED;
+				lRotate(node->parent);
+				brother = node->parent->right;
+			}
+			if(brother->left->color == BLACK && brother->right->color == BLACK){
+				brother->color = RED;
+				node = node->parent;
+			}
+			else{
+				if(brother->right->color == BLACK){
+					brother->left->color = BLACK;
+					brother->color = RED;
+					rRotate(brother);
+					brother = node->parent->right;
+				}
+				brother->color = node->parent->color;
+				node->parent->color = BLACK;
+				brother->right->color = BLACK;
+				lRotate(node->parent);
+				break;
+			}
+		}
+		else{
+			brother = node->parent->left;
+			
+			if(brother->color == RED){
+				brother->color = BLACK;
+				node->parent->color = RED;
+				rRotate(node->parent);
+				brother = node->parent->left;
+			}
+			if(brother->left->color == BLACK && brother->right->color == BLACK){
+				brother->color = RED;
+				node = node->parent;
+			}
+			else{
+				if(brother->left->color == BLACK){
+					brother->right->color = BLACK;
+					brother->color = RED;
+					lRotate(brother);
+					brother = node->parent->left; 
+				}
+				brother->color = node->parent->color;
+				node->parent->color = BLACK;
+				brother->left->color = BLACK;
+				rRotate(node->parent);
+				break;
+			}
+		}
+		
+	}
+	
+	node->color = BLACK;
 }
 
 void RBTree::rbRemove(int val){
@@ -129,7 +191,7 @@ void RBTree::rbRemove(int val){
 	
 	if(node->left != NULL && node->right != NULL){
 		
-		TreeNode *head = node->left;
+		RBNode *head = node->left;
 		
 		while(head->right != NULL) head = head->right;
 		
@@ -156,7 +218,7 @@ void RBTree::rbRemove(int val){
 		head->color = node->color;
 		head->parent = node->parent;
 		
-		if(color == BLACK) rbRemoveFix(child,parent);
+		if(color == BLACK) rbRemoveFix(child);
 		delete node;
 		
 		return ;
@@ -175,7 +237,7 @@ void RBTree::rbRemove(int val){
 	}
 	else root = child;
 	
-	if(color == BLACK) rbRemoveFix(child,parent);
+	if(color == BLACK) rbRemoveFix(child);
 	delete node;
 	
 }

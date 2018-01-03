@@ -4,8 +4,8 @@
 using namespace std;
 
 typedef enum{
-	RED = 0;
-	BLACK = 1;
+	RED = 0,
+	BLACK
 }Color;
 
 class RBNode{
@@ -35,7 +35,7 @@ public:
 	RBNode* search(int);
 	void rbInsertFix(RBNode*);
 	void rbInsert(int);
-	void rbRemoveFix(RBNode*, RBNode*);
+	void rbRemoveFix(RBNode*);
 	void rbRemove(int);
 };
 
