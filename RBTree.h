@@ -32,9 +32,10 @@ public:
 	void lRotate(RBNode*);
 	void rRotate(RBNode*);
 	
-	void rbInsertFix(int);
+	RBNode* search(int);
+	void rbInsertFix(RBNode*);
 	void rbInsert(int);
-	void rbRemoveFix(int);
+	void rbRemoveFix(RBNode*, RBNode*);
 	void rbRemove(int);
 };
 

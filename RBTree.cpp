@@ -24,6 +24,16 @@ void RBTree::rRotate(RBNode* y){
 	y->parent = x;
 }
              
+RBNode* RBTree::search(int val){
+	
+	RBNode *cur = root;
+	while(cur != NULL && cur->key != val){
+		if(cur->key < val) cur = cur->left;
+		else cur = cur->right;
+	}
+	return cur;
+}
+
 // change the color 
 void rbInsertFix(RBNode* ptr){
 	
@@ -107,87 +117,67 @@ void RBTree::rbInsert(int val){
 	
 }
 
-void RBTree::rbRemoveFix(RBNode* ptr){
+void RBTree::rbRemoveFix(RBNode* child, RBNode* parent){
 	
 }
 
 void RBTree::rbRemove(int val){
 	
-	// binary tree remove
-	TreeNode *tmp, *cur = root;
-	while(cur->val != val){
-		tmp = cur;
-		if(cur->val < val) cur = cur->right;
-		else cur = cur->left;
-	}
-	if(cur == root){
-		tmp = root;
-		if(cur->left == NULL && cur->right == NULL) return NULL;
-		else if(cur->left == NULL){
-			cur = cur->right;
-			delete tmp;
-			return cur;
+	RBNode *node = search(val);
+	RBNode *child, *parent;
+	Color color;
+	
+	if(node->left != NULL && node->right != NULL){
+		
+		TreeNode *head = node->left;
+		
+		while(head->right != NULL) head = head->right;
+		
+		if(node != root){
+			if(node->parent->left == node) node->parent->left = head;
+			else node->parent->right = head;
 		}
-		else if(cur->right == NULL){
-			cur = cur->left;
-			delete tmp;
-			return cur;
-		}
+		else
+			root = head;
+			
+		child = head->left;
+		parent = head->parent;
+		color = head->color;
+		if(node == parent) parent = head;
 		else{
-			cur = tmp = root->left;
-			while(cur->right != NULL){
-				tmp = cur;
-				cur = cur->right;
-			}
-			if(tmp == cur){
-				cur->right = root->right;
-				delete root;
-				return cur;
-			}
-			else{
-				tmp->right = cur->left;
-				cur->left = root->left;
-				cur->right = root->right;
-				delete root;
-				return cur;
-			}
+			if(child) child->parent = parent;
+			parent->right = child;
+			head->left = node->left;
+			node->left->parent = head;
 		}
+		
+		head->right = node->right;
+		node->right->parent = head;
+		head->color = node->color;
+		head->parent = node->parent;
+		
+		if(color == BLACK) rbRemoveFix(child,parent);
+		delete node;
+		
+		return ;
 	}
-	else{
-		if(cur->left == NULL && cur->right == NULL)
-			delete cur;
-		else if(cur->left == NULL){
-			if(tmp->val < cur->val) tmp->right = cur->right;
-			else tmp->left = cur->right;
-		}
-		else if(cur->right == NULL){
-			if(tmp->val < cur->val) tmp->right = cur->left;
-			else tmp->left = cur->left;
-		}
-		else{
-			TreeNode *head = cur, *pre;
-			cur = pre = head->left;
-			while(cur->right != NULL){
-				pre = cur;
-				cur = cur->right;
-			}
-			if(pre == cur){
-				cur->right = head->right;
-				if(head->val < tmp->val) tmp->left = cur;
-				else tmp->right = cur;
-				delete head;
-			}
-			else{
-				pre->right = cur->left;
-				cur->left = head->left;
-				cur->right = head->right;
-				if(head->val < tmp->val) tmp->left = cur;
-				else tmp->right = cur;
-				delete head;
-			}
-		}
-		return root;
+	
+	if(node->left != NULL) child = node->left;
+	else child = node->right;
+	
+	parent = node->parent;
+	color = node->color;
+	
+	if(parent){
+		if(parent->left == node) parent->left = child;
+		else parent->right = child;
+		if(child) child->parent = parent;
 	}
+	else root = child;
+	
+	if(color == BLACK) rbRemoveFix(child,parent);
+	delete node;
+	
 }
 
 
