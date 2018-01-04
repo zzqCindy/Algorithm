@@ -25,3 +25,10 @@ Here is the catalog for all the documents.
 
 
 
+##Notice
+
+**Date**: 2018/01/03
+
+In the red black tree, pay attention to the the leaf node, which is nil in fact. They are defined to be the black node. If you didn't define the leaf node, there will be problem in the implement of the red black tree.
+
+I don't define the leaf node in the beginning and it later turns out that I am using a variation whose value is NULL to be the parameter of rotation without noticing.
