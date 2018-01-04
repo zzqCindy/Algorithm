@@ -35,8 +35,15 @@ public:
 	RBNode* search(int);
 	void rbInsertFix(RBNode*);
 	void rbInsert(int);
-	void rbRemoveFix(RBNode*);
+	void rbRemoveFix(RBNode*,RBNode*);
 	void rbRemove(int);
+	
+	void preorder(RBNode*);
+	void inorder(RBNode*);
+	void postorder(RBNode*);
+	
+	RBNode* getRoot();
+	void print(RBNode*,int);
 };
 
 #endif 
