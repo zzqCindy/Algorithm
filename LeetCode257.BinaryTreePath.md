@@ -31,6 +31,8 @@ Explanation: All root-to-leaf paths are: 1->2->5, 1->3
 最直接的想法，DFS，字符串构造
 
 ```
+public List<String> resultList = new ArrayList<String>();
+
 public List<String> binaryTreePaths2(TreeNode root) {
         if (root == null) {
             return resultList;
